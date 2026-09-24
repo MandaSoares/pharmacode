@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { COLORS, FONTS, SPACING, BUTTON_HEIGHT, MIN_TOUCH } from '../utils/theme';
-import { buscarPorEAN } from '../data/medicamentos';
+import { useCores, useEstilos } from '../context/ConfigContext';
+import { FONTS, SPACING, BUTTON_HEIGHT, MIN_TOUCH } from '../utils/theme';
+import { buscarMedicamento } from '../services/medicamentos';
 
 export default function ScannerScreen({ navigation }) {
+  const cores = useCores();
+  const s = useEstilos(criarEstilos);
   const [permission, requestPermission] = useCameraPermissions();
   const [escaneado, setEscaneado] = useState(false);
 
@@ -29,14 +32,26 @@ export default function ScannerScreen({ navigation }) {
     if (escaneado) return;
     setEscaneado(true);
 
-    const medicamento = buscarPorEAN(data);
-    if (medicamento) {
-      navigation.navigate('Bula', { medicamento });
-    } else {
-      navigation.navigate('NaoEncontrado', { ean: data });
-    }
+    abrirResultado(data);
+  }
 
-    setTimeout(() => setEscaneado(false), 2000);
+  async function abrirResultado(ean) {
+    try {
+      const resultado = await buscarMedicamento(ean);
+      if (resultado.status === 'ok') {
+        navigation.navigate('Bula', { medicamento: resultado.medicamento });
+      } else {
+        navigation.navigate('NaoEncontrado', { ean, motivo: resultado.status, nome: resultado.nome });
+      }
+      // Espera a troca de tela antes de liberar a camera para ler de novo
+      setTimeout(() => setEscaneado(false), 2000);
+    } catch (e) {
+      Alert.alert(
+        'Sem conexão com o servidor',
+        'Não foi possível buscar o remédio. Confira a internet e tente de novo.',
+        [{ text: 'OK', onPress: () => setEscaneado(false) }],
+      );
+    }
   }
 
   return (
@@ -63,6 +78,12 @@ export default function ScannerScreen({ navigation }) {
           <View style={[s.corner, { bottom: 0, left: 0, borderBottomWidth: 3, borderLeftWidth: 3 }]} />
           <View style={[s.corner, { bottom: 0, right: 0, borderBottomWidth: 3, borderRightWidth: 3 }]} />
         </View>
+        {escaneado && (
+          <View style={s.buscando}>
+            <ActivityIndicator size="large" color={cores.white} />
+            <Text style={s.buscandoTexto}>Buscando remédio...</Text>
+          </View>
+        )}
       </View>
 
       <View style={s.rodape}>
@@ -75,29 +96,34 @@ export default function ScannerScreen({ navigation }) {
   );
 }
 
-const s = StyleSheet.create({
+const criarEstilos = (cores) => StyleSheet.create({
   container: { flex: 1, backgroundColor: '#1A1A2E' },
   header: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     paddingHorizontal: SPACING.md, paddingTop: SPACING.xxl, paddingBottom: SPACING.sm,
   },
   btnVoltar: { width: MIN_TOUCH, height: MIN_TOUCH, justifyContent: 'center', alignItems: 'center' },
-  voltarTexto: { fontSize: 28, color: COLORS.white },
-  headerTitulo: { fontSize: FONTS.subtitle, fontWeight: '700', color: COLORS.white },
-  instrucao: { fontSize: FONTS.body, color: COLORS.white, textAlign: 'center', paddingHorizontal: SPACING.lg, marginBottom: SPACING.md },
+  voltarTexto: { fontSize: 28, color: cores.white },
+  headerTitulo: { fontSize: FONTS.subtitle, fontWeight: '700', color: cores.white },
+  instrucao: { fontSize: FONTS.body, color: cores.white, textAlign: 'center', paddingHorizontal: SPACING.lg, marginBottom: SPACING.md },
   cameraContainer: { flex: 1, marginHorizontal: SPACING.lg, borderRadius: 16, overflow: 'hidden', position: 'relative' },
   camera: { flex: 1 },
   scanGuide: { position: 'absolute', top: '30%', left: '10%', right: '10%', height: 120 },
-  corner: { position: 'absolute', width: 30, height: 30, borderColor: COLORS.primary },
+  corner: { position: 'absolute', width: 30, height: 30, borderColor: cores.primary },
+  buscando: {
+    ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center', alignItems: 'center', gap: SPACING.sm,
+  },
+  buscandoTexto: { fontSize: FONTS.body, color: cores.white, fontWeight: '600' },
   rodape: { paddingHorizontal: SPACING.lg, paddingVertical: SPACING.lg, alignItems: 'center' },
   dica: { fontSize: FONTS.small, color: '#AAAAAA', marginBottom: SPACING.sm },
   botaoSec: {
-    backgroundColor: COLORS.primary, height: BUTTON_HEIGHT, borderRadius: 12,
+    backgroundColor: cores.primary, height: BUTTON_HEIGHT, borderRadius: 12,
     justifyContent: 'center', alignItems: 'center', width: '100%',
   },
-  botaoSecTexto: { color: COLORS.white, fontSize: FONTS.body, fontWeight: '600' },
+  botaoSecTexto: { color: cores.white, fontSize: FONTS.body, fontWeight: '600' },
   permissao: { flex: 1, justifyContent: 'center', paddingHorizontal: SPACING.lg },
-  permissaoTexto: { fontSize: FONTS.body, color: COLORS.white, textAlign: 'center', marginBottom: SPACING.lg },
-  botao: { backgroundColor: COLORS.primary, height: BUTTON_HEIGHT, borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
-  botaoTexto: { color: COLORS.white, fontSize: FONTS.button, fontWeight: '700' },
+  permissaoTexto: { fontSize: FONTS.body, color: cores.white, textAlign: 'center', marginBottom: SPACING.lg },
+  botao: { backgroundColor: cores.primary, height: BUTTON_HEIGHT, borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
+  botaoTexto: { color: cores.white, fontSize: FONTS.button, fontWeight: '700' },
 });

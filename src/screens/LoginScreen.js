@@ -1,128 +1,137 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { COLORS, FONTS, SPACING, BUTTON_HEIGHT, INPUT_HEIGHT } from '../utils/theme';
+import {
+  View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Alert,
+  Keyboard, KeyboardAvoidingView, ScrollView, Platform,
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import PinInput from '../components/PinInput';
+import { formatCPF, CPF_COMPLETO } from '../utils/formatar';
+import { useCores, useEstilos } from '../context/ConfigContext';
+import { FONTS, FONT_FAMILY, SPACING, BUTTON_HEIGHT, INPUT_HEIGHT } from '../utils/theme';
 
 export default function LoginScreen({ navigation }) {
+  const cores = useCores();
+  const s = useEstilos(criarEstilos);
   const [cpf, setCpf] = useState('');
   const [pin, setPin] = useState(['', '', '', '']);
-  const pinRefs = [useRef(), useRef(), useRef(), useRef()];
+  const pinRef = useRef();
 
-  function formatCPF(value) {
-    const nums = value.replace(/\D/g, '').slice(0, 11);
-    return nums
-      .replace(/(\d{3})(\d)/, '$1.$2')
-      .replace(/(\d{3})(\d)/, '$1.$2')
-      .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-  }
-
-  function handlePinChange(text, index) {
-    const newPin = [...pin];
-    newPin[index] = text;
-    setPin(newPin);
-    if (text && index < 3) {
-      pinRefs[index + 1].current.focus();
+  function handleCpfChange(t) {
+    const formatado = formatCPF(t);
+    setCpf(formatado);
+    // CPF completo: pula direto para a senha
+    if (formatado.length === CPF_COMPLETO) {
+      pinRef.current.focus();
     }
   }
 
-  function handlePinBackspace(index) {
-    if (!pin[index] && index > 0) {
-      pinRefs[index - 1].current.focus();
-      const newPin = [...pin];
-      newPin[index - 1] = '';
-      setPin(newPin);
+  // Confere CPF e PIN com a conta salva no celular pelo Cadastro
+  async function entrar() {
+    Keyboard.dismiss();
+    if (cpf.length !== CPF_COMPLETO || pin.join('').length !== 4) {
+      return Alert.alert('Dados incompletos', 'Digite seu CPF e os 4 números da senha.');
+    }
+    try {
+      const salva = await AsyncStorage.getItem('conta');
+      if (!salva) {
+        return Alert.alert('Nenhuma conta encontrada', 'Cadastre-se para usar o app.', [
+          { text: 'Cancelar', style: 'cancel' },
+          { text: 'Cadastrar', onPress: () => navigation.navigate('Cadastro') },
+        ]);
+      }
+      const conta = JSON.parse(salva);
+      if (conta.cpf !== cpf || conta.pin !== pin.join('')) {
+        setPin(['', '', '', '']);
+        return Alert.alert('CPF ou senha incorretos', 'Confira os números e tente de novo.');
+      }
+      navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+    } catch (e) {
+      Alert.alert('Erro', 'Não foi possível entrar. Tente de novo.');
     }
   }
 
   return (
-    <View style={s.container}>
-      <View style={s.centro}>
-        <Text style={s.logoIcone}>💊</Text>
-        <Text style={s.logoTexto}>PharmaCode</Text>
-        <Text style={s.titulo}>Acesse sua conta</Text>
+    <KeyboardAvoidingView
+      style={s.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      {/* Tocar fora dos campos fecha o teclado; arrastar a tela tambem */}
+      <ScrollView
+        contentContainerStyle={s.scrollConteudo}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+      >
+        <View style={s.centro}>
+          <Image source={require('../../assets/logo/logo.png')} style={s.logo} resizeMode="contain" accessibilityLabel="PharmaCode" />
+          <Text style={s.titulo}>Acesse sua conta</Text>
 
-        <View style={s.campoGrupo}>
-          <Text style={s.label}>Seu CPF</Text>
-          <TextInput
-            style={s.input}
-            placeholder="000.000.000-00"
-            placeholderTextColor={COLORS.textPlaceholder}
-            value={cpf}
-            onChangeText={(t) => setCpf(formatCPF(t))}
-            keyboardType="numeric"
-            maxLength={14}
-            accessibilityLabel="Campo para digitar o CPF"
-          />
-        </View>
-
-        <View style={s.campoGrupo}>
-          <Text style={s.label}>Sua senha (4 numeros)</Text>
-          <View style={s.pinContainer}>
-            {pin.map((digit, i) => (
-              <TextInput
-                key={i}
-                ref={pinRefs[i]}
-                style={s.pinBox}
-                value={digit}
-                onChangeText={(t) => handlePinChange(t.replace(/\D/g, ''), i)}
-                onKeyPress={({ nativeEvent }) => {
-                  if (nativeEvent.key === 'Backspace') handlePinBackspace(i);
-                }}
-                keyboardType="numeric"
-                maxLength={1}
-                secureTextEntry
-                accessibilityLabel={`Digito ${i + 1} da senha`}
-              />
-            ))}
+          <View style={s.campoGrupo}>
+            <Text style={s.label}>Seu CPF</Text>
+            <TextInput
+              style={s.input}
+              placeholder="000.000.000-00"
+              placeholderTextColor={cores.textPlaceholder}
+              value={cpf}
+              onChangeText={handleCpfChange}
+              keyboardType="number-pad"
+              maxLength={CPF_COMPLETO}
+              accessibilityLabel="Campo para digitar o CPF"
+            />
           </View>
-          <Text style={s.ajuda}>Igual a senha do cartao do banco</Text>
+
+          <View style={s.campoGrupo}>
+            <Text style={s.label}>Sua senha (4 numeros)</Text>
+            {/* Ultimo digito: fecha o teclado para o botao Entrar ficar visivel */}
+            <PinInput ref={pinRef} value={pin} onChange={setPin} onComplete={Keyboard.dismiss} />
+            <Text style={s.ajuda}>Igual a senha do cartao do banco</Text>
+          </View>
+
+          <TouchableOpacity
+            style={s.botao}
+            onPress={entrar}
+            accessibilityRole="button"
+            accessibilityLabel="Entrar no app"
+          >
+            <Text style={s.botaoTexto}>Entrar</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={s.linkArea} onPress={() => navigation.navigate('Cadastro')} accessibilityRole="link">
+            <Text style={s.link}>Não tem uma conta? Cadastre-se</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={s.linkArea} onPress={() => navigation.navigate('RecuperarSenha')} accessibilityRole="link">
+            <Text style={s.link}>Esqueceu a senha?</Text>
+          </TouchableOpacity>
         </View>
-
-        <TouchableOpacity
-          style={s.botao}
-          onPress={() => navigation.navigate('Home')}
-          accessibilityRole="button"
-          accessibilityLabel="Entrar no app"
-        >
-          <Text style={s.botaoTexto}>Entrar</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-          <Text style={s.link}>Esqueceu a senha?</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
-const s = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.white,
+const criarEstilos = (cores) => StyleSheet.create({
+  container: { flex: 1, backgroundColor: cores.white },
+  scrollConteudo: {
+    flexGrow: 1,
     justifyContent: 'center',
     paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.xxl,
   },
   centro: { alignItems: 'center' },
-  logoIcone: { fontSize: 48, marginBottom: SPACING.xs },
-  logoTexto: { fontSize: 24, fontWeight: '700', color: COLORS.primary, marginBottom: SPACING.md },
-  titulo: { fontSize: FONTS.title, fontWeight: '700', color: COLORS.text, marginBottom: SPACING.xl },
+  logo: { width: 150, height: undefined, aspectRatio: 864 / 511, marginBottom: SPACING.md },
+  titulo: { fontSize: FONTS.title, fontWeight: '700', color: cores.text, marginBottom: SPACING.xl },
   campoGrupo: { width: '100%', marginBottom: SPACING.lg },
-  label: { fontSize: FONTS.subtitle, fontWeight: '700', color: COLORS.text, marginBottom: SPACING.xs },
+  label: { fontSize: FONTS.subtitle, fontWeight: '700', color: cores.text, marginBottom: SPACING.xs },
   input: {
-    backgroundColor: COLORS.inputBg, height: INPUT_HEIGHT, borderRadius: 12,
-    paddingHorizontal: SPACING.md, fontSize: FONTS.button, color: COLORS.text,
-    borderWidth: 1, borderColor: COLORS.border,
+    backgroundColor: cores.inputBg, height: INPUT_HEIGHT, borderRadius: 12,
+    paddingHorizontal: SPACING.md, fontSize: FONTS.button, color: cores.text,
+    borderWidth: 1, borderColor: cores.border,
   },
-  pinContainer: { flexDirection: 'row', gap: 16 },
-  pinBox: {
-    width: 65, height: 65, backgroundColor: COLORS.inputBg, borderRadius: 12,
-    borderWidth: 1, borderColor: COLORS.border, textAlign: 'center',
-    fontSize: 28, fontWeight: '700', color: COLORS.text,
-  },
-  ajuda: { fontSize: FONTS.small, color: COLORS.textSecondary, marginTop: SPACING.xs },
+  ajuda: { fontSize: FONTS.small, color: cores.textSecondary, marginTop: SPACING.xs },
   botao: {
-    backgroundColor: COLORS.primary, height: BUTTON_HEIGHT, borderRadius: 12,
-    justifyContent: 'center', alignItems: 'center', width: '100%', marginBottom: SPACING.md,
+    backgroundColor: cores.primary, height: BUTTON_HEIGHT, borderRadius: 12,
+    justifyContent: 'center', alignItems: 'center', width: '100%',
   },
-  botaoTexto: { color: COLORS.white, fontSize: FONTS.button, fontWeight: '700' },
-  link: { color: COLORS.primary, fontSize: FONTS.body, marginTop: SPACING.sm },
+  botaoTexto: { color: cores.white, fontSize: FONTS.button, fontWeight: '700' },
+  linkArea: { width: '100%', alignItems: 'center', paddingTop: SPACING.sm, minHeight: 44, justifyContent: 'center' },
+  link: { fontFamily: FONT_FAMILY.link, fontSize: FONTS.small, color: cores.primary, textDecorationLine: 'underline' },
 });

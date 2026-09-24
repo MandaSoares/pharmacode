@@ -1,15 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView, Alert } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Svg, { Circle, Rect } from 'react-native-svg';
+import { Check } from 'lucide-react-native';
 import CONDICOES from '../data/condicoes';
-import { COLORS, FONTS, SPACING, BUTTON_HEIGHT, MIN_TOUCH } from '../utils/theme';
+import MenuBotao from '../components/MenuBotao';
+import IconeCondicao from '../components/IconeCondicao';
+import AlergiasEditor, { AlergiaChip } from '../components/AlergiasEditor';
+import { useCores, useEstilos } from '../context/ConfigContext';
+import { FONT_FAMILY, RADIUS, BUTTON_HEIGHT } from '../utils/theme';
 
-export default function PerfilScreen({ navigation }) {
+// Frames "Perfil de Saude" e "Perfil de Saude (Editar)" do Figma
+export default function PerfilScreen() {
+  const cores = useCores();
+  const s = useEstilos(criarEstilos);
+  const insets = useSafeAreaInsets();
   const [nome, setNome] = useState('');
   const [condicoes, setCondicoes] = useState([]);
+  const [alergias, setAlergias] = useState([]);
   const [editando, setEditando] = useState(false);
   const [nomeEdit, setNomeEdit] = useState('');
   const [condicoesEdit, setCondicoesEdit] = useState([]);
+  const [alergiasEdit, setAlergiasEdit] = useState([]);
 
   useEffect(() => { carregarPerfil(); }, []);
 
@@ -20,6 +33,7 @@ export default function PerfilScreen({ navigation }) {
         const p = JSON.parse(perfil);
         setNome(p.nome || '');
         setCondicoes(p.condicoes || []);
+        setAlergias(p.alergias || []);
       }
     } catch (e) {}
   }
@@ -27,6 +41,7 @@ export default function PerfilScreen({ navigation }) {
   function iniciarEdicao() {
     setNomeEdit(nome);
     setCondicoesEdit([...condicoes]);
+    setAlergiasEdit([...alergias]);
     setEditando(true);
   }
 
@@ -36,118 +51,182 @@ export default function PerfilScreen({ navigation }) {
 
   async function salvar() {
     try {
-      await AsyncStorage.setItem('perfil', JSON.stringify({ nome: nomeEdit, condicoes: condicoesEdit }));
-      setNome(nomeEdit);
+      // Le o perfil salvo antes para nao apagar campos que esta tela nao edita
+      const salvo = await AsyncStorage.getItem('perfil');
+      const perfil = salvo ? JSON.parse(salvo) : {};
+      await AsyncStorage.setItem('perfil', JSON.stringify({
+        ...perfil, nome: nomeEdit.trim(), condicoes: condicoesEdit, alergias: alergiasEdit,
+      }));
+      setNome(nomeEdit.trim());
       setCondicoes(condicoesEdit);
+      setAlergias(alergiasEdit);
       setEditando(false);
-      Alert.alert('Perfil salvo', 'Suas informacoes foram atualizadas.');
-    } catch (e) { Alert.alert('Erro', 'Nao foi possivel salvar.'); }
+      Alert.alert('Perfil salvo', 'Suas informações foram atualizadas.');
+    } catch (e) {
+      Alert.alert('Erro', 'Não foi possível salvar. Tente de novo.');
+    }
   }
 
-  if (editando) {
-    return (
-      <View style={s.container}>
-        <View style={s.header}>
-          <TouchableOpacity style={s.btnVoltar} onPress={() => setEditando(false)}>
-            <Text style={s.voltarTexto}>←</Text>
-          </TouchableOpacity>
-          <Text style={s.headerTitulo}>Editar Perfil</Text>
-          <View style={{ width: MIN_TOUCH }} />
-        </View>
-        <ScrollView style={{ flex: 1 }} contentContainerStyle={s.scrollContent}>
-          <View style={s.campoGrupo}>
-            <Text style={s.label}>Nome</Text>
-            <TextInput style={s.input} value={nomeEdit} onChangeText={setNomeEdit} />
-          </View>
-          <View style={s.campoGrupo}>
-            <Text style={s.label}>Condicoes</Text>
-            <Text style={s.ajuda}>Marque as condicoes que voce tem. Assim, avisamos se algum remedio nao for indicado pra voce.</Text>
-            {CONDICOES.map(c => (
-              <TouchableOpacity key={c.id} style={s.condicaoRow} onPress={() => toggleCondicao(c.id)}>
-                <Text style={s.condicaoIcone}>{c.icone}</Text>
-                <Text style={s.condicaoLabel}>{c.label}</Text>
-                <View style={[s.checkbox, condicoesEdit.includes(c.id) && s.checkboxAtivo]}>
-                  {condicoesEdit.includes(c.id) && <Text style={s.checkmark}>✓</Text>}
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-          <TouchableOpacity style={s.botao} onPress={salvar}>
-            <Text style={s.botaoTexto}>Salvar</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-    );
-  }
+  const condicoesDoPerfil = condicoes.map(id => CONDICOES.find(c => c.id === id)).filter(Boolean);
 
   return (
-    <View style={s.container}>
+    <View style={[s.container, { paddingTop: insets.top }]}>
       <View style={s.header}>
-        <TouchableOpacity style={s.btnVoltar} onPress={() => navigation.goBack()}>
-          <Text style={s.voltarTexto}>←</Text>
-        </TouchableOpacity>
-        <Text style={s.headerTitulo}>Meu Perfil</Text>
-        <View style={{ width: MIN_TOUCH }} />
+        <MenuBotao />
       </View>
-      <View style={{ flex: 1 }}>
-        <View style={s.scrollContent}>
-          <View style={{ alignSelf: 'center', marginVertical: SPACING.lg }}><Text style={{ fontSize: 64 }}>👤</Text></View>
-          <View style={s.campoGrupo}>
-            <Text style={s.label}>Nome</Text>
-            <Text style={s.valor}>{nome || 'Nao informado'}</Text>
-          </View>
-          <View style={s.campoGrupo}>
-            <Text style={s.label}>Condicoes</Text>
-            {condicoes.length === 0 ? (
-              <Text style={s.valor}>Nenhuma condicao cadastrada</Text>
-            ) : condicoes.map(cId => {
-              const c = CONDICOES.find(cd => cd.id === cId);
-              return c ? (
-                <View key={c.id} style={s.condicaoTag}>
-                  <Text style={s.condicaoTagTexto}>{c.icone} {c.label}</Text>
+
+      <ScrollView
+        contentContainerStyle={[s.conteudo, { paddingBottom: insets.bottom + 32 }]}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        automaticallyAdjustKeyboardInsets
+      >
+        <Avatar cores={cores} />
+        <Text style={s.titulo}>Meu Perfil</Text>
+
+        {editando ? (
+          <>
+            <View style={s.bloco}>
+              <Text style={s.rotulo}>Nome</Text>
+              <TextInput
+                style={[s.caixa, s.caixaTexto]}
+                value={nomeEdit}
+                onChangeText={setNomeEdit}
+                placeholder="Digite seu nome"
+                placeholderTextColor={cores.textPlaceholder}
+                autoCapitalize="words"
+                accessibilityLabel="Nome"
+              />
+            </View>
+
+            <View style={s.bloco}>
+              <Text style={s.rotulo}>Condições</Text>
+              <Text style={s.descricao}>
+                Marque suas condições. Assim, avisamos se algum remédio não for indicado para você.
+              </Text>
+              {CONDICOES.map(c => {
+                const marcado = condicoesEdit.includes(c.id);
+                return (
+                  <TouchableOpacity
+                    key={c.id}
+                    style={[s.caixa, s.linhaCondicao, s.linhaEditavel]}
+                    onPress={() => toggleCondicao(c.id)}
+                    accessibilityRole="checkbox"
+                    accessibilityState={{ checked: marcado }}
+                  >
+                    <IconeCondicao condicao={c} />
+                    <Text style={[s.caixaTexto, { flex: 1 }]}>{c.label}</Text>
+                    <View style={[s.checkbox, marcado && s.checkboxMarcado]}>
+                      {marcado && <Check size={20} color={cores.white} strokeWidth={3} />}
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+
+            <View style={s.bloco}>
+              <Text style={s.rotulo}>Alergias</Text>
+              <AlergiasEditor alergias={alergiasEdit} onChange={setAlergiasEdit} />
+            </View>
+
+            <TouchableOpacity style={s.botao} onPress={salvar} accessibilityRole="button">
+              <Text style={s.botaoTexto}>Salvar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={s.linkArea} onPress={() => setEditando(false)} accessibilityRole="button">
+              <Text style={s.link}>Cancelar</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            <View style={s.bloco}>
+              <Text style={s.rotulo}>Nome</Text>
+              <View style={s.caixa}>
+                <Text style={[s.caixaTexto, !nome && s.vazio]}>{nome || 'Não informado'}</Text>
+              </View>
+            </View>
+
+            <View style={s.bloco}>
+              <Text style={s.rotulo}>Condições</Text>
+              {condicoesDoPerfil.length === 0 ? (
+                <View style={s.caixa}>
+                  <Text style={[s.caixaTexto, s.vazio]}>Nenhuma condição cadastrada</Text>
                 </View>
-              ) : null;
-            })}
-          </View>
-          <TouchableOpacity style={s.botao} onPress={iniciarEdicao}>
-            <Text style={s.botaoTexto}>Alterar perfil</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+              ) : condicoesDoPerfil.map(c => (
+                <View key={c.id} style={[s.caixa, s.linhaCondicao]}>
+                  <IconeCondicao condicao={c} />
+                  <Text style={[s.caixaTexto, { flex: 1 }]}>{c.label}</Text>
+                </View>
+              ))}
+            </View>
+
+            <View style={[s.bloco, s.blocoAlergias]}>
+              <Text style={s.rotulo}>Alergias a medicamentos</Text>
+              {alergias.length === 0 ? (
+                <Text style={[s.caixaTexto, s.vazio]}>Nenhuma alergia cadastrada</Text>
+              ) : (
+                <View style={s.chips}>
+                  {alergias.map(a => <AlergiaChip key={a} nome={a} />)}
+                </View>
+              )}
+            </View>
+
+            <TouchableOpacity style={s.botao} onPress={iniciarEdicao} accessibilityRole="button">
+              <Text style={s.botaoTexto}>Alterar perfil</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </ScrollView>
     </View>
   );
 }
 
-const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.white },
-  header: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingHorizontal: SPACING.md, paddingTop: SPACING.xxl, paddingBottom: SPACING.sm,
+// Avatar do Figma: circulo de 96px com anel azul e silhueta cinza
+function Avatar({ cores }) {
+  return (
+    <View
+      style={{
+        width: 96, height: 96, borderRadius: 48, borderWidth: 3, borderColor: cores.primary,
+        backgroundColor: cores.white, alignSelf: 'center', justifyContent: 'center', alignItems: 'center',
+      }}
+      accessibilityLabel="Foto do perfil"
+    >
+      <Svg width={88} height={88} viewBox="0 0 88 88">
+        <Circle cx={44} cy={33} r={13} fill={cores.textPlaceholder} />
+        <Rect x={24} y={51} width={40} height={22} rx={11} fill={cores.textPlaceholder} />
+      </Svg>
+    </View>
+  );
+}
+
+const criarEstilos = (cores) => StyleSheet.create({
+  container: { flex: 1, backgroundColor: cores.white },
+  header: { flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 16, paddingTop: 12 },
+  conteudo: { paddingHorizontal: 20, paddingTop: 18, gap: 20 },
+  titulo: { fontFamily: FONT_FAMILY.titulo, fontSize: 28, lineHeight: 34, color: cores.text, textAlign: 'center' },
+  bloco: { gap: 12 },
+  blocoAlergias: { gap: 20 },
+  rotulo: { fontFamily: FONT_FAMILY.texto, fontSize: 20, lineHeight: 26, color: cores.text },
+  descricao: { fontFamily: FONT_FAMILY.texto, fontSize: 16, lineHeight: 22, color: cores.textSecondary },
+  // Caixa cinza-clara do Figma (58px) usada no nome e nas condicoes
+  caixa: {
+    minHeight: 58, justifyContent: 'center', paddingHorizontal: 16, paddingVertical: 12,
+    borderRadius: RADIUS, backgroundColor: cores.background,
   },
-  btnVoltar: { width: MIN_TOUCH, height: MIN_TOUCH, justifyContent: 'center', alignItems: 'center' },
-  voltarTexto: { fontSize: 28, color: COLORS.text },
-  headerTitulo: { fontSize: FONTS.subtitle, fontWeight: '700', color: COLORS.text },
-  scrollContent: { paddingHorizontal: SPACING.lg, paddingBottom: SPACING.xxl },
-  campoGrupo: { marginBottom: SPACING.lg },
-  label: { fontSize: FONTS.subtitle, fontWeight: '700', color: COLORS.text, marginBottom: SPACING.xs },
-  valor: { fontSize: FONTS.body, color: COLORS.textSecondary },
-  input: {
-    backgroundColor: COLORS.inputBg, height: 56, borderRadius: 12,
-    paddingHorizontal: SPACING.md, fontSize: FONTS.body, color: COLORS.text,
-    borderWidth: 1, borderColor: COLORS.border,
+  caixaTexto: { fontFamily: FONT_FAMILY.texto, fontSize: 20, lineHeight: 26, color: cores.text },
+  vazio: { color: cores.textSecondary },
+  linhaCondicao: { flexDirection: 'row', alignItems: 'center', gap: 14 },
+  linhaEditavel: { minHeight: 68 },
+  checkbox: {
+    width: 36, height: 36, borderRadius: 8, borderWidth: 2, borderColor: cores.border,
+    backgroundColor: cores.white, justifyContent: 'center', alignItems: 'center',
   },
-  ajuda: { fontSize: FONTS.small, color: COLORS.textSecondary, marginBottom: SPACING.md },
-  condicaoRow: {
-    flexDirection: 'row', alignItems: 'center', paddingVertical: SPACING.sm,
-    minHeight: MIN_TOUCH, borderBottomWidth: 1, borderBottomColor: COLORS.background,
+  checkboxMarcado: { backgroundColor: cores.primary, borderColor: cores.primary },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  botao: {
+    height: BUTTON_HEIGHT, borderRadius: RADIUS, backgroundColor: cores.primary,
+    justifyContent: 'center', alignItems: 'center',
   },
-  condicaoIcone: { fontSize: 24, marginRight: SPACING.sm },
-  condicaoLabel: { fontSize: FONTS.body, color: COLORS.text, flex: 1 },
-  checkbox: { width: 32, height: 32, borderRadius: 8, borderWidth: 2, borderColor: COLORS.border, justifyContent: 'center', alignItems: 'center' },
-  checkboxAtivo: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
-  checkmark: { color: COLORS.white, fontSize: 18, fontWeight: '700' },
-  condicaoTag: { backgroundColor: COLORS.background, borderRadius: 20, paddingHorizontal: SPACING.md, paddingVertical: SPACING.xs, marginTop: SPACING.xs, alignSelf: 'flex-start' },
-  condicaoTagTexto: { fontSize: FONTS.body, color: COLORS.text },
-  botao: { backgroundColor: COLORS.primary, height: BUTTON_HEIGHT, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginTop: SPACING.lg },
-  botaoTexto: { color: COLORS.white, fontSize: FONTS.button, fontWeight: '700' },
+  botaoTexto: { fontFamily: FONT_FAMILY.botao, fontSize: 22, lineHeight: 26, color: cores.white },
+  linkArea: { minHeight: 44, justifyContent: 'center', alignItems: 'center' },
+  link: { fontFamily: FONT_FAMILY.link, fontSize: 16, color: cores.primary, textDecorationLine: 'underline' },
 });

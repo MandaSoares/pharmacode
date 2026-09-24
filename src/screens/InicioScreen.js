@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { COLORS, FONTS, SPACING, BUTTON_HEIGHT } from '../utils/theme';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { useEstilos } from '../context/ConfigContext';
+import { FONTS, SPACING, BUTTON_HEIGHT } from '../utils/theme';
 
 export default function InicioScreen({ navigation }) {
+  const s = useEstilos(criarEstilos);
   return (
     <View style={s.container}>
       <View style={s.centro}>
-        <Text style={s.logoIcone}>💊</Text>
-        <Text style={s.logoTexto}>PharmaCode</Text>
+        <Image source={require('../../assets/logo/logo-title.png')} style={s.logo} resizeMode="contain" accessibilityLabel="PharmaCode" />
         <Text style={s.subtitulo}>A sua bula facil e ao seu alcance</Text>
         <Text style={s.descricao}>
           Aponte a camera para a caixa do medicamento e pronto! Receba uma bula
@@ -27,38 +28,32 @@ export default function InicioScreen({ navigation }) {
   );
 }
 
-const s = StyleSheet.create({
+const criarEstilos = (cores) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: cores.white,
     justifyContent: 'center',
     paddingHorizontal: SPACING.lg,
   },
   centro: { alignItems: 'center' },
-  logoIcone: { fontSize: 64, marginBottom: SPACING.sm },
-  logoTexto: {
-    fontSize: FONTS.title,
-    fontWeight: '700',
-    color: COLORS.primary,
-    marginBottom: SPACING.md,
-  },
+  logo: { width: 200, height: undefined, aspectRatio: 864 / 511, marginBottom: SPACING.lg },
   subtitulo: {
     fontSize: FONTS.subtitle,
     fontWeight: '600',
-    color: COLORS.text,
+    color: cores.text,
     textAlign: 'center',
     marginBottom: SPACING.sm,
   },
   descricao: {
     fontSize: FONTS.body,
-    color: COLORS.textSecondary,
+    color: cores.textSecondary,
     textAlign: 'center',
     lineHeight: 26,
     marginBottom: SPACING.xl,
     paddingHorizontal: SPACING.sm,
   },
   botao: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: cores.primary,
     height: BUTTON_HEIGHT,
     borderRadius: 12,
     justifyContent: 'center',
@@ -66,7 +61,7 @@ const s = StyleSheet.create({
     width: '100%',
   },
   botaoTexto: {
-    color: COLORS.white,
+    color: cores.white,
     fontSize: FONTS.button,
     fontWeight: '700',
   },
