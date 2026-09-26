@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "PharmaCode",
+    "slug": "pharmacode",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "O app precisa da camera para escanear o codigo de barras do remedio."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#4164E0"
+      },
+      "permissions": [
+        "CAMERA"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "O app precisa da camera para escanear o codigo de barras do remedio."
+        }
+      ],
+      "expo-asset",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#4164E0"
+        }
+      ],
+      "expo-font"
+    ]
+  }
+}
