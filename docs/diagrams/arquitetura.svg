@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 520" width="860" height="520" font-family="'Segoe UI', Arial, sans-serif">
+
+  <!-- Background -->
+  <rect width="860" height="520" fill="#F8F9FA" rx="12"/>
+
+  <!-- Title -->
+  <text x="430" y="38" text-anchor="middle" font-size="18" font-weight="700" fill="#1A1A2E">Arquitetura do Sistema — PharmaCode</text>
+
+  <!-- ─── SMARTPHONE BLOCK ─── -->
+  <rect x="30" y="65" width="230" height="390" rx="14" fill="#EEF2FF" stroke="#6366F1" stroke-width="2"/>
+  <text x="145" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#6366F1">📱 Aplicativo Mobile</text>
+  <text x="145" y="105" text-anchor="middle" font-size="10" fill="#6366F1">React Native / Expo</text>
+
+  <!-- Camera -->
+  <rect x="50" y="118" width="190" height="52" rx="8" fill="#fff" stroke="#A5B4FC" stroke-width="1.5"/>
+  <text x="145" y="138" text-anchor="middle" font-size="11" font-weight="600" fill="#3730A3">📷 Câmera</text>
+  <text x="145" y="154" text-anchor="middle" font-size="10" fill="#4338CA">expo-camera · EAN-13</text>
+
+  <!-- Screens -->
+  <rect x="50" y="182" width="190" height="52" rx="8" fill="#fff" stroke="#A5B4FC" stroke-width="1.5"/>
+  <text x="145" y="202" text-anchor="middle" font-size="11" font-weight="600" fill="#3730A3">🖥 Telas</text>
+  <text x="145" y="218" text-anchor="middle" font-size="10" fill="#4338CA">Scanner · Bula · Alerta · Config</text>
+
+  <!-- TTS -->
+  <rect x="50" y="246" width="190" height="52" rx="8" fill="#fff" stroke="#A5B4FC" stroke-width="1.5"/>
+  <text x="145" y="266" text-anchor="middle" font-size="11" font-weight="600" fill="#3730A3">🔊 Síntese de Voz</text>
+  <text x="145" y="282" text-anchor="middle" font-size="10" fill="#4338CA">expo-speech · pt-BR</text>
+
+  <!-- AsyncStorage -->
+  <rect x="50" y="310" width="190" height="52" rx="8" fill="#fff" stroke="#A5B4FC" stroke-width="1.5"/>
+  <text x="145" y="330" text-anchor="middle" font-size="11" font-weight="600" fill="#3730A3">💾 Armazenamento Local</text>
+  <text x="145" y="346" text-anchor="middle" font-size="10" fill="#4338CA">AsyncStorage · perfil · conta</text>
+
+  <!-- Haptics -->
+  <rect x="50" y="374" width="190" height="52" rx="8" fill="#fff" stroke="#A5B4FC" stroke-width="1.5"/>
+  <text x="145" y="394" text-anchor="middle" font-size="11" font-weight="600" fill="#3730A3">📳 Haptic Feedback</text>
+  <text x="145" y="410" text-anchor="middle" font-size="10" fill="#4338CA">expo-haptics · alertas de risco</text>
+
+  <!-- ─── VPN BLOCK ─── -->
+  <rect x="315" y="185" width="170" height="75" rx="12" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+  <text x="400" y="210" text-anchor="middle" font-size="12" font-weight="700" fill="#059669">🔒 Tailscale VPN</text>
+  <text x="400" y="228" text-anchor="middle" font-size="10" fill="#047857">Rede privada segura</text>
+  <text x="400" y="244" text-anchor="middle" font-size="10" fill="#047857">dispositivo ↔ servidor</text>
+
+  <!-- ─── BACKEND BLOCK ─── -->
+  <rect x="555" y="65" width="270" height="225" rx="14" fill="#FFF7ED" stroke="#F97316" stroke-width="2"/>
+  <text x="690" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#EA580C">⚙️ Backend</text>
+  <text x="690" y="106" text-anchor="middle" font-size="10" fill="#EA580C">Go · Docker · porta 8080</text>
+
+  <!-- API REST -->
+  <rect x="575" y="118" width="230" height="52" rx="8" fill="#fff" stroke="#FED7AA" stroke-width="1.5"/>
+  <text x="690" y="138" text-anchor="middle" font-size="11" font-weight="600" fill="#C2410C">🌐 API REST</text>
+  <text x="690" y="154" text-anchor="middle" font-size="10" fill="#EA580C">GET /drugs/ean/{"{ean}"} · auth</text>
+
+  <!-- Admin Panel -->
+  <rect x="575" y="182" width="230" height="52" rx="8" fill="#fff" stroke="#FED7AA" stroke-width="1.5"/>
+  <text x="690" y="202" text-anchor="middle" font-size="11" font-weight="600" fill="#C2410C">🖥 Painel Admin</text>
+  <text x="690" y="218" text-anchor="middle" font-size="10" fill="#EA580C">Cadastro de remédios e bulas</text>
+
+  <!-- Docker -->
+  <rect x="575" y="246" width="230" height="30" rx="6" fill="#FFF3E0" stroke="#FED7AA" stroke-width="1"/>
+  <text x="690" y="266" text-anchor="middle" font-size="10" fill="#9A3412">🐳 Docker Compose</text>
+
+  <!-- ─── DATABASE BLOCK ─── -->
+  <rect x="590" y="340" width="200" height="75" rx="12" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="2"/>
+  <text x="690" y="365" text-anchor="middle" font-size="12" font-weight="700" fill="#0369A1">🗄️ PostgreSQL</text>
+  <text x="690" y="383" text-anchor="middle" font-size="10" fill="#0284C7">drugs · embalagens</text>
+  <text x="690" y="399" text-anchor="middle" font-size="10" fill="#0284C7">bulas · users</text>
+
+  <!-- ─── USER ─── -->
+  <rect x="355" y="430" width="90" height="60" rx="12" fill="#F5F3FF" stroke="#7C3AED" stroke-width="2"/>
+  <text x="400" y="458" text-anchor="middle" font-size="22">👴</text>
+  <text x="400" y="480" text-anchor="middle" font-size="10" font-weight="600" fill="#6D28D9">Usuário</text>
+
+  <!-- ─── ARROWS ─── -->
+  <!-- User → App -->
+  <line x1="355" y1="460" x2="260" y2="370" stroke="#7C3AED" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arr-purple)"/>
+
+  <!-- App → VPN -->
+  <line x1="260" y1="230" x2="315" y2="222" stroke="#6366F1" stroke-width="2" marker-end="url(#arr-indigo)"/>
+  <!-- VPN → Backend -->
+  <line x1="485" y1="222" x2="555" y2="200" stroke="#10B981" stroke-width="2" marker-end="url(#arr-green)"/>
+  <!-- Backend → DB -->
+  <line x1="690" y1="290" x2="690" y2="340" stroke="#F97316" stroke-width="2" marker-end="url(#arr-orange)"/>
+
+  <!-- Arrow labels -->
+  <text x="280" y="215" font-size="9" fill="#4338CA">HTTP + JSON</text>
+  <text x="490" y="210" font-size="9" fill="#059669">via VPN</text>
+  <text x="698" y="320" font-size="9" fill="#EA580C">SQL</text>
+
+  <!-- ─── LEGEND ─── -->
+  <rect x="30" y="470" width="270" height="36" rx="8" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+  <text x="45" y="485" font-size="10" fill="#475569">Fluxo:</text>
+  <text x="45" y="499" font-size="10" fill="#6366F1">📱 App</text>
+  <text x="95" y="499" font-size="10" fill="#475569">→</text>
+  <text x="105" y="499" font-size="10" fill="#10B981">VPN</text>
+  <text x="133" y="499" font-size="10" fill="#475569">→</text>
+  <text x="143" y="499" font-size="10" fill="#F97316">API Go</text>
+  <text x="183" y="499" font-size="10" fill="#475569">→</text>
+  <text x="193" y="499" font-size="10" fill="#0369A1">PostgreSQL</text>
+
+  <!-- ─── ARROWHEAD MARKERS ─── -->
+  <defs>
+    <marker id="arr-purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C3AED"/>
+    </marker>
+    <marker id="arr-indigo" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#6366F1"/>
+    </marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#10B981"/>
+    </marker>
+    <marker id="arr-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#F97316"/>
+    </marker>
+  </defs>
+</svg>
