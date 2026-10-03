@@ -165,7 +165,7 @@ Desenvolver um aplicativo mobile que permita a idosos compreender rapidamente co
 | MacBook Air M2 | Apple MacBook Air (2022) | macOS Sequoia 15 | Desenvolvimento frontend |
 | iPhone 11 | Apple iPhone 11 | iOS 17 | Testes do aplicativo (câmera, TTS, haptics) |
 | iPhone 13 | Apple iPhone 13 | iOS 17 | Testes do aplicativo (câmera, TTS, haptics) |
-| Smartphone Android | — | Android 12+ | Testes de compatibilidade |
+| Samsung Galaxy A54 | Samsung Galaxy A54 | Android 13 | Testes de compatibilidade |
 | Notebook | Notebook (Nathan) | Windows/Linux | Backend Go + PostgreSQL via Docker |
 
 ---
