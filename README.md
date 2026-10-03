@@ -1,10 +1,10 @@
-# PharmaCode 💊
+# PharmaCode
 
 > Aplicativo mobile que simplifica bulas de medicamentos para idosos usando leitura de código de barras.
 
 ---
 
-## 📋 Identificação do Projeto
+## Identificação do Projeto
 
 | Campo | Informação |
 |-------|-----------|
@@ -27,7 +27,7 @@
 
 ---
 
-## 🔍 Visão Geral do Projeto
+## Visão Geral do Projeto
 
 O **PharmaCode** é um aplicativo móvel desenvolvido para facilitar o acesso de **idosos** às informações contidas em bulas de medicamentos. A solução utiliza a **câmera do smartphone** para escanear o código de barras (EAN-13) de uma embalagem e exibe, na tela, uma bula simplificada com linguagem acessível, ícones visuais e leitura em voz alta.
 
@@ -37,7 +37,7 @@ O aplicativo também verifica automaticamente se o medicamento possui **contrain
 
 ---
 
-## 🚨 Problema
+## Problema
 
 Idosos frequentemente utilizam múltiplos medicamentos, mas as bulas originais possuem texto minúsculo, linguagem técnica e informações excessivas — tornando-as praticamente inacessíveis para esse público.
 
@@ -51,7 +51,7 @@ Idosos frequentemente utilizam múltiplos medicamentos, mas as bulas originais p
 
 ---
 
-## 🎯 Objetivos
+## Objetivos
 
 **Objetivo Geral**
 
@@ -70,7 +70,7 @@ Desenvolver um aplicativo mobile que permita a idosos compreender rapidamente co
 
 ---
 
-## 👥 Público-Alvo
+## Público-Alvo
 
 **Perfil principal:** Pessoas com 60 anos ou mais que utilizam medicamentos com frequência.
 
@@ -86,7 +86,7 @@ Desenvolver um aplicativo mobile que permita a idosos compreender rapidamente co
 
 ---
 
-## ✅ Funcionalidades
+## Funcionalidades
 
 | ID | Funcionalidade | Descrição | Status |
 |----|----------------|-----------|--------|
@@ -101,13 +101,13 @@ Desenvolver um aplicativo mobile que permita a idosos compreender rapidamente co
 | RF09 | Login com PIN | Autenticação local por PIN numérico de 4 dígitos | ✅ |
 | RF10 | Ajuste de acessibilidade | Configuração de tamanho de fonte, velocidade e volume de voz | ✅ |
 | RF11 | Modo claro/escuro | Interface adapta ao tema do sistema operacional | ✅ |
-| RF12 | Recuperação de senha | Redefinição de PIN via CPF | 🚧 |
-| RF13 | Histórico de medicamentos | Registra últimos remédios consultados | ⬜ |
-| RF14 | Autenticação via API | Login e cadastro sincronizados com backend | 🚧 |
+| RF12 | Recuperação de senha | Redefinição de PIN via CPF | ✅ |
+| RF13 | Histórico de medicamentos | Registra últimos remédios consultados | ✅ |
+| RF14 | Autenticação via API | Login e cadastro sincronizados com backend | ✅ |
 
 ---
 
-## 🔧 Requisitos Não Funcionais
+## Requisitos Não Funcionais
 
 | ID | Requisito | Descrição |
 |----|-----------|-----------|
@@ -121,7 +121,7 @@ Desenvolver um aplicativo mobile que permita a idosos compreender rapidamente co
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 ### Frontend (Aplicativo Mobile)
 
@@ -158,18 +158,19 @@ Desenvolver um aplicativo mobile que permita a idosos compreender rapidamente co
 
 ---
 
-## 💻 Hardware Utilizado
+## Hardware Utilizado
 
 | Equipamento | Modelo | Sistema | Finalidade |
 |-------------|--------|---------|-----------|
 | MacBook Air M2 | Apple MacBook Air (2022) | macOS Sequoia 15 | Desenvolvimento frontend |
-| iPhone | iPhone 13 / iPhone SE | iOS 17 | Testes do aplicativo (câmera, TTS, haptics) |
+| iPhone 11 | Apple iPhone 11 | iOS 17 | Testes do aplicativo (câmera, TTS, haptics) |
+| iPhone 13 | Apple iPhone 13 | iOS 17 | Testes do aplicativo (câmera, TTS, haptics) |
 | Smartphone Android | — | Android 12+ | Testes de compatibilidade |
-| Servidor de Desenvolvimento | MacBook (Nathan) | macOS | Backend Go + PostgreSQL via Docker |
+| Notebook | Notebook (Nathan) | Windows/Linux | Backend Go + PostgreSQL via Docker |
 
 ---
 
-## 🏗️ Arquitetura do Sistema
+## Arquitetura do Sistema
 
 ```
 Usuário
@@ -205,11 +206,11 @@ Aplicativo PharmaCode (React Native / Expo)
 7. Se sem risco → tela da Bula simplificada
 ```
 
-> Diagrama disponível em: [`docs/diagrams/arquitetura.png`](docs/diagrams/arquitetura.png)
+> Diagrama disponível em: [`docs/diagrams/arquitetura.svg`](docs/diagrams/arquitetura.svg)
 
 ---
 
-## 📱 Funcionamento da Realidade Aumentada
+## Funcionamento da Realidade Aumentada
 
 O PharmaCode utiliza **reconhecimento de código de barras (Barcode Scanning / Image Recognition)** como sua implementação de Realidade Aumentada.
 
@@ -237,7 +238,7 @@ O PharmaCode utiliza **reconhecimento de código de barras (Barcode Scanning / I
 
 ---
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 pharmacode/
@@ -268,7 +269,7 @@ pharmacode/
 
 ---
 
-## 🧩 Principais Componentes
+## Principais Componentes
 
 | Componente / Arquivo | Responsabilidade |
 |----------------------|-----------------|
@@ -297,7 +298,7 @@ pharmacode/
 
 ---
 
-## 📦 Dependências
+## Dependências
 
 As dependências estão listadas no arquivo `package.json`. As principais são:
 
@@ -320,7 +321,7 @@ Para instalar todas as dependências: `npm install`
 
 ---
 
-## ⚙️ Configuração do Ambiente
+## Configuração do Ambiente
 
 ### Pré-requisitos
 
@@ -333,7 +334,7 @@ Para instalar todas as dependências: `npm install`
 ### 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/[usuario]/pharmacode.git
+git clone https://github.com/MandaSoares/pharmacode.git
 cd pharmacode
 ```
 
@@ -365,7 +366,7 @@ O servidor ficará disponível em `http://localhost:8080`.
 
 ---
 
-## ▶️ Como Executar
+## Como Executar
 
 ### Modo de desenvolvimento (Expo Go)
 
@@ -395,7 +396,7 @@ Requer Android Studio com um AVD configurado.
 
 ---
 
-## 📖 Como Usar
+## Como Usar
 
 1. **Primeiro acesso:** toque em "Criar conta", informe nome, CPF e crie um PIN de 4 dígitos
 2. **Perfil de saúde:** na segunda etapa do cadastro, selecione suas condições de saúde e alergias
@@ -408,7 +409,7 @@ Requer Android Studio com um AVD configurado.
 
 ---
 
-## 📊 Diagramas
+## Diagramas
 
 ### Fluxo do Usuário
 
@@ -436,7 +437,7 @@ Requer Android Studio com um AVD configurado.
 
 ---
 
-## 📸 Interface do Aplicativo
+## Interface do Aplicativo
 
 | Tela | Descrição |
 |------|-----------|
@@ -450,7 +451,7 @@ Requer Android Studio com um AVD configurado.
 
 ---
 
-## 🧪 Testes Técnicos
+## Testes Técnicos
 
 ### Testes realizados
 
@@ -469,17 +470,17 @@ Requer Android Studio com um AVD configurado.
 
 ---
 
-## 📱 Dispositivos Testados
+## Dispositivos Testados
 
 | Dispositivo | Sistema | Resultado |
 |-------------|---------|-----------|
+| iPhone 11 | iOS 17.x | ✅ Funcional |
 | iPhone 13 | iOS 17.x | ✅ Funcional |
-| iPhone SE (3ª geração) | iOS 17.x | ✅ Funcional |
 | Samsung Galaxy A54 | Android 13 | ✅ Funcional |
 
 ---
 
-## ⚠️ Limitações Conhecidas
+## Limitações Conhecidas
 
 | Limitação | Descrição |
 |-----------|-----------|
@@ -492,7 +493,7 @@ Requer Android Studio com um AVD configurado.
 
 ---
 
-## 📹 Evidências de Funcionamento
+## Evidências de Funcionamento
 
 - Vídeo de demonstração: [`docs/documents/demo.mp4`](docs/documents/demo.mp4)
 - Screenshots: [`docs/images/`](docs/images/)
@@ -500,7 +501,7 @@ Requer Android Studio com um AVD configurado.
 
 ---
 
-## 🛠️ Problemas e Soluções
+## Problemas e Soluções
 
 | Problema | Solução |
 |----------|---------|
@@ -512,7 +513,7 @@ Requer Android Studio com um AVD configurado.
 
 ---
 
-## 📅 Cronograma Técnico
+## Cronograma Técnico
 
 | Semana | Atividade |
 |--------|-----------|
@@ -528,7 +529,7 @@ Requer Android Studio com um AVD configurado.
 
 ---
 
-## 🔀 Controle de Versão
+## Controle de Versão
 
 O projeto utiliza **Git** com repositório no **GitHub**.
 
@@ -548,7 +549,7 @@ docs: atualizar README com estrutura do projeto
 
 ---
 
-## ✅ Checklist de Entrega
+## Checklist de Entrega
 
 - [x] Repositório criado e organizado
 - [x] Código-fonte atualizado no repositório
@@ -564,10 +565,10 @@ docs: atualizar README com estrutura do projeto
 - [x] Limitações conhecidas documentadas
 - [x] Arquitetura do sistema descrita
 - [x] Funcionamento da RA explicado tecnicamente
-- [ ] Screenshots das telas adicionados em `docs/images/`
-- [ ] Diagrama de arquitetura adicionado em `docs/diagrams/`
-- [ ] Vídeo de demonstração adicionado em `docs/documents/`
+- [x] Screenshots das telas adicionados em `docs/images/`
+- [x] Diagrama de arquitetura adicionado em `docs/diagrams/`
+- [x] Vídeo de demonstração adicionado em `docs/documents/`
 
 ---
 
-*PharmaCode — tornando medicamentos acessíveis para quem mais precisa* 💙
+*PharmaCode — tornando medicamentos acessíveis para quem mais precisa*
