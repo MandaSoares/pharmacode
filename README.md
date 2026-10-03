@@ -19,11 +19,11 @@
 
 | Nome | RA | Responsabilidade |
 |------|-----|-----------------|
-| Amanda Silva Soares | 235276 | Desenvolvimento React Native, UI/UX, integração com API, documentação |
-| Nathan Tanzi | 223202 | Desenvolvimento backend (Go + PostgreSQL), API REST, painel administrativo |
-| Marisol Marques | 222634 | Design de interface, pesquisa de UX com público-alvo, testes |
-| Gabriel Curto | 235855 | Infraestrutura (Docker, Tailscale VPN), banco de dados |
-| Giulia Albuquerque | 224643 | Pesquisa, documentação técnica, testes de usabilidade |
+| Amanda Silva Soares | 235276 | Frontend React Native: telas, acessibilidade, integracao com API |
+| Giulia Albuquerque | 224643 | Frontend: wireframe, tela da bula, perfil de saude |
+| Nathan Tanzi | 223202 | Backend: banco de dados PostgreSQL, API REST, Tailscale, painel admin |
+| Marisol Marques | 222634 | Documentacao: relatorios, artigo cientifico, slides, cadastro de remedios |
+| Gabriel Curto Teixeira | 235855 | Dados e testes: bulas ANVISA, EANs, QA, testes com idosos, edicao de video |
 
 ---
 
