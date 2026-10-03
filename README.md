@@ -441,11 +441,11 @@ Requer Android Studio com um AVD configurado.
 
 | Tela | Descrição |
 |------|-----------|
-| ![Home](docs/images/home.png) | Tela inicial com botão de scan |
-| ![Scanner](docs/images/scanner.png) | Câmera em tempo real para leitura do EAN |
-| ![Bula](docs/images/bula.png) | Bula simplificada com ícones e TTS |
-| ![Alerta](docs/images/alerta.png) | Alerta de contraindicação com vibração |
-| ![Config](docs/images/config.png) | Configurações de acessibilidade |
+| <img src="docs/images/home.png" width="200"/> | Tela inicial com botão de scan |
+| <img src="docs/images/scanner.png" width="200"/> | Câmera em tempo real para leitura do EAN |
+| <img src="docs/images/bula.png" width="200"/> | Bula simplificada com ícones e TTS |
+| <img src="docs/images/alerta.png" width="200"/> | Alerta de contraindicação com vibração |
+| <img src="docs/images/config.png" width="200"/> | Configurações de acessibilidade |
 
 > Screenshots disponíveis em: [`docs/images/`](docs/images/)
 
