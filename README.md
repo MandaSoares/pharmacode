@@ -19,11 +19,11 @@
 
 | Nome | RA | Responsabilidade |
 |------|-----|-----------------|
-| Amanda Silva Soares | — | Desenvolvimento React Native, UI/UX, integração com API, documentação |
-| Nathan | — | Desenvolvimento backend (Go + PostgreSQL), API REST, painel administrativo |
-| Marisol | — | Design de interface, pesquisa de UX com público-alvo, testes |
-| Gabriel | — | Infraestrutura (Docker, Tailscale VPN), banco de dados |
-| Giulia | — | Pesquisa, documentação técnica, testes de usabilidade |
+| Amanda Silva Soares | 235276 | Desenvolvimento React Native, UI/UX, integração com API, documentação |
+| Nathan Tanzi | 223202 | Desenvolvimento backend (Go + PostgreSQL), API REST, painel administrativo |
+| Marisol Marques | 222634 | Design de interface, pesquisa de UX com público-alvo, testes |
+| Gabriel | 235855 | Infraestrutura (Docker, Tailscale VPN), banco de dados |
+| Giulia Albuquerque | 224643 | Pesquisa, documentação técnica, testes de usabilidade |
 
 ---
 
