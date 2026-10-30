@@ -614,7 +614,7 @@ Capturas do aplicativo em execução (pasta [`docs/images/`](docs/images/)). A i
 | 9–10 | Cadastro de remédios e bulas (ANVISA, EANs) | Gabriel, Marisol | Concluído |
 | 11–12 | Alertas, contraindicações e alergias | Amanda, Giulia | Concluído |
 | 13–14 | Acessibilidade (voz, tamanho da letra, alto contraste) | Amanda | Concluído |
-| 15 | Testes com idosos e em dispositivos reais | Gabriel, equipe | Concluído |
+| 15 | Testes com idosos e em dispositivos reais | Equipe | Concluído |
 | 15 | Documentação (README, relatório, artigo, slides) | Marisol, Amanda | Concluído |
 | 16 | Entrega final e apresentação | Equipe | Concluído |
 
