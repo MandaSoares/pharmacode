@@ -142,12 +142,19 @@ Desenvolver um aplicativo mobile que permita a idosos compreender rapidamente co
 
 ### Backend
 
+Repositório: [Ntanzi07/PharmaCode-UPX2026](https://github.com/Ntanzi07/PharmaCode-UPX2026)
+
 | Tecnologia | Versão | Utilização |
 |-----------|--------|-----------|
-| Go (Golang) | 1.22+ | API REST principal |
-| PostgreSQL | 16 | Banco de dados relacional |
-| Docker / Docker Compose | — | Containerização do backend |
-| Tailscale | — | VPN para comunicação dispositivo ↔ servidor |
+| Go | 1.26 | API REST (`cmd/api`) |
+| pgx | 5.11.0 | Driver PostgreSQL da API |
+| PostgreSQL | 16 (imagem `postgres:16-alpine`) | Banco de dados relacional |
+| golang-migrate | 4.17.1 | Aplicação automática das migrations (`db/migrations`) |
+| Swagger (swaggo) | 1.16.6 | Documentação da API em `/docs` |
+| React + TypeScript + Vite | 19.1 / 5.9 / 8.0 | Painel admin web |
+| nginx | 1.27 (alpine) | Servidor do painel admin e proxy de `/api` para a API |
+| Docker / Docker Compose | — | Execução dos serviços `db`, `migrate`, `api` e `web` |
+| Tailscale | — | VPN para comunicação entre o smartphone e o servidor |
 
 ### Ferramentas
 
@@ -201,7 +208,7 @@ Aplicativo PharmaCode (React Native / Expo SDK 58, executado no Expo Go)
     PostgreSQL (Docker)
         ▲
         │
-    Painel admin web — porta 3000
+    Painel admin web (React + nginx) — porta 3000
     (cadastro de remédios, embalagens, bulas, interações e usuários)
 ```
 
@@ -394,16 +401,27 @@ O IP é o endereço da máquina do backend na rede Tailscale (exibido no aplicat
 
 ### 4. Backend
 
-A API Go, o banco PostgreSQL e o painel admin são mantidos pelo integrante Nathan Tanzi em repositório separado e executados com Docker Compose em um notebook com Ubuntu:
+A API Go, o banco PostgreSQL e o painel admin ficam no repositório [Ntanzi07/PharmaCode-UPX2026](https://github.com/Ntanzi07/PharmaCode-UPX2026) e são executados com Docker Compose (requisito: Docker com Compose).
 
 ```bash
-docker compose up -d
+git clone https://github.com/Ntanzi07/PharmaCode-UPX2026.git
+cd PharmaCode-UPX2026
+cp .env.example .env        # definir ADMIN_NAME, ADMIN_EMAIL e ADMIN_PASSWORD
+docker compose up --build -d
 ```
 
-- API: porta `8080` (ex.: `http://<IP-Tailscale>:8080/drugs/ean/7896094211131`)
-- Painel admin: porta `3000`
+O container `migrate` aplica as migrations automaticamente. Serviços disponíveis:
 
-Para conferir se a API está acessível pelo celular, abra no navegador do smartphone (com o Tailscale ligado) a URL de exemplo acima; deve aparecer o JSON do medicamento.
+| Serviço | Endereço |
+|---------|----------|
+| Painel admin | `http://localhost:3000` |
+| API | `http://localhost:8080` |
+| Swagger | `http://localhost:8080/docs` |
+| PostgreSQL | `localhost:5433` |
+
+O app consome apenas `GET /drugs/ean/{ean}`, que não exige login e só retorna bulas **revisadas** por um farmacêutico (perfil `reviewer`) no painel. Para o celular acessar a API, o computador do backend e o smartphone devem estar na mesma rede Tailscale.
+
+Para conferir o acesso, abra no navegador do smartphone (com o Tailscale ligado) `http://<IP-Tailscale>:8080/drugs/ean/7896094211131`; deve aparecer o JSON do medicamento.
 
 ---
 
@@ -629,7 +647,7 @@ docs: adicionar screenshots de alerta e configuracoes
 |---------|------|
 | Código-fonte do aplicativo | [github.com/MandaSoares/pharmacode](https://github.com/MandaSoares/pharmacode) |
 | Projeto Expo (EAS Update) | [expo.dev/accounts/upxs-team/projects/pharmacode](https://expo.dev/accounts/upxs-team/projects/pharmacode) |
-| Backend (API Go, PostgreSQL e painel admin) | Repositório separado, mantido por Nathan Tanzi |
+| Backend (API Go, PostgreSQL e painel admin) | [github.com/Ntanzi07/PharmaCode-UPX2026](https://github.com/Ntanzi07/PharmaCode-UPX2026) |
 
 ---
 
