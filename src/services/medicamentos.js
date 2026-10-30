@@ -43,7 +43,7 @@ export async function buscarMedicamento(ean) {
   const dados = await resposta.json();
   // A API usa LEFT JOIN: sem bula revisada, as secoes chegam como null
   if (!dados.what_is_it_for && !dados.posology) {
-    return { status: 'em_revisao', nome: dados.brand_name || dados.active_ingredient };
+    return { status: 'em_revisao', nome: dados.brand_name || principiosAtivos(dados).join(' + ') };
   }
   return { status: 'ok', medicamento: converterDaApi(dados) };
 }
@@ -67,15 +67,23 @@ function iconePara(texto) {
   return '💊';
 }
 
+// A API manda active_ingredients (array); aceita tambem o formato antigo (string)
+function principiosAtivos(d) {
+  if (Array.isArray(d.active_ingredients)) return d.active_ingredients.filter(Boolean);
+  if (d.active_ingredient) return d.active_ingredient.split(/\s*[+,;]\s*/).filter(Boolean);
+  return [];
+}
+
 // Converte a resposta de GET /drugs/ean/{ean} para o formato usado pelas telas
 function converterDaApi(d) {
-  const nome = d.brand_name || d.active_ingredient;
+  const principios = principiosAtivos(d);
+  const nome = d.brand_name || principios.join(' + ');
   return {
     id: d.registration_number,
     ean: d.ean,
     nome,
     nomePopular: nome,
-    subtitulo: [d.active_ingredient, d.description].filter(Boolean).join(' — '),
+    subtitulo: [principios.join(' + '), d.description].filter(Boolean).join(' — '),
     paraQueServe: d.what_is_it_for || '',
     comoTomar: emItens(d.posology).map(texto => ({ icone: iconePara(texto), texto })),
     alertas: [...emItens(d.contraindications), ...emItens(d.warnings)],
@@ -84,7 +92,7 @@ function converterDaApi(d) {
     contraindicacoes: [],
     textoContraindicacoes: d.contraindications || '',
     // Principio ativo para conferir alergias (ex: "ibuprofeno + cafeina" vira dois itens)
-    alergenos: d.active_ingredient.split(/\s*[+,;]\s*/).filter(Boolean),
+    alergenos: principios,
     secoes: [
       { titulo: 'Para que serve', texto: d.what_is_it_for },
       { titulo: 'Se esquecer uma dose', texto: d.missed_dose },

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet, Keyboard, ScrollView, ActivityIndicator, Alert,
 } from 'react-native';
-import { buscarMedicamento } from '../services/medicamentos';
+import { buscarMedicamento, ErroConexao } from '../services/medicamentos';
 import { useCores, useEstilos } from '../context/ConfigContext';
 import { FONTS, SPACING, BUTTON_HEIGHT, MIN_TOUCH, INPUT_HEIGHT } from '../utils/theme';
 
@@ -25,7 +25,12 @@ export default function DigitarCodigoScreen({ navigation }) {
         navigation.navigate('NaoEncontrado', { ean: limpo, motivo: resultado.status, nome: resultado.nome });
       }
     } catch (e) {
-      Alert.alert('Sem conexão com o servidor', 'Não foi possível buscar o remédio. Confira a internet e tente de novo.');
+      if (__DEV__) console.log('[DigitarCodigo] erro:', e);
+      if (e instanceof ErroConexao) {
+        Alert.alert('Sem conexão com o servidor', 'Não foi possível buscar o remédio. Confira a internet e tente de novo.');
+      } else {
+        Alert.alert('Erro ao abrir o remédio', 'Algo deu errado ao ler os dados. Tente de novo.');
+      }
     } finally {
       setBuscando(false);
     }

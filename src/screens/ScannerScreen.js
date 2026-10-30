@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } fr
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useCores, useEstilos } from '../context/ConfigContext';
 import { FONTS, SPACING, BUTTON_HEIGHT, MIN_TOUCH } from '../utils/theme';
-import { buscarMedicamento } from '../services/medicamentos';
+import { buscarMedicamento, ErroConexao } from '../services/medicamentos';
 
 export default function ScannerScreen({ navigation }) {
   const cores = useCores();
@@ -44,9 +44,13 @@ export default function ScannerScreen({ navigation }) {
       }
       setTimeout(() => setEscaneado(false), 2000);
     } catch (e) {
+      if (__DEV__) console.log('[Scanner] erro:', e);
+      const conexao = e instanceof ErroConexao;
       Alert.alert(
-        'Sem conexão com o servidor',
-        'Não foi possível buscar o remédio. Confira a internet e tente de novo.',
+        conexao ? 'Sem conexão com o servidor' : 'Erro ao abrir o remédio',
+        conexao
+          ? 'Não foi possível buscar o remédio. Confira a internet e tente de novo.'
+          : 'Algo deu errado ao ler os dados. Tente de novo.',
         [{ text: 'OK', onPress: () => setEscaneado(false) }],
       );
     }
