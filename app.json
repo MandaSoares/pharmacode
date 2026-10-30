@@ -23,7 +23,8 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "O app precisa da camera para escanear o codigo de barras do remedio."
+          "cameraPermission": "O app precisa da camera para escanear o codigo de barras do remedio.",
+          "recordAudioAndroid": false
         }
       ],
       "expo-asset",
@@ -35,6 +36,18 @@
       ],
       "expo-font",
       "expo-status-bar"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "983d4a77-9c9b-4bec-85bd-82f02b294f60"
+      }
+    },
+    "owner": "upxs-team",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/983d4a77-9c9b-4bec-85bd-82f02b294f60"
+    }
   }
 }
