@@ -20,7 +20,7 @@
 | Nome | RA | Responsabilidade |
 |------|-----|-----------------|
 | Amanda Silva Soares | 235276 | Frontend React Native: telas, acessibilidade, integracao com API |
-| Giulia Fernandes Albuquerque | 224643 | Frontend: wireframe, tela da bula, perfil de saude |
+| Giulia Albuquerque | 224643 | Frontend: wireframe, tela da bula, perfil de saude |
 | Nathan Tanzi | 223202 | Backend: banco de dados PostgreSQL, API REST, Tailscale, painel admin |
 | Marisol Marques | 222634 | Documentacao: relatorios, artigo cientifico, slides, cadastro de remedios |
 | Gabriel Curto Teixeira | 235855 | Dados e testes: bulas ANVISA, EANs, QA, testes com idosos, edicao de video |
