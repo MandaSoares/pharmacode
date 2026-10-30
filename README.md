@@ -20,7 +20,7 @@
 | Nome | RA | Responsabilidade |
 |------|-----|-----------------|
 | Amanda Silva Soares | 235276 | Frontend React Native: telas, acessibilidade, integracao com API |
-| Giulia Albuquerque | 224643 | Frontend: wireframe, tela da bula, perfil de saude |
+| Giulia Fernandes Albuquerque | 224643 | Frontend: wireframe, tela da bula, perfil de saude |
 | Nathan Tanzi | 223202 | Backend: banco de dados PostgreSQL, API REST, Tailscale, painel admin |
 | Marisol Marques | 222634 | Documentacao: relatorios, artigo cientifico, slides, cadastro de remedios |
 | Gabriel Curto Teixeira | 235855 | Dados e testes: bulas ANVISA, EANs, QA, testes com idosos, edicao de video |
@@ -173,9 +173,9 @@ Repositório: [Ntanzi07/PharmaCode-UPX2026](https://github.com/Ntanzi07/PharmaCo
 | Equipamento | Modelo | Sistema | Finalidade |
 |-------------|--------|---------|-----------|
 | MacBook Air | Apple MacBook Air M1 (2020), 8 GB RAM | macOS Tahoe 26.5.1 | Desenvolvimento do aplicativo (Expo/Metro) e publicação via EAS Update |
-| iPhone 11 | Apple iPhone 11 | iOS | Testes do aplicativo (câmera, TTS, haptics) |
-| iPhone 13 | Apple iPhone 13 | iOS | Testes do aplicativo (câmera, TTS, haptics) |
-| Samsung Galaxy A54 | Samsung Galaxy A54 | Android | Testes de compatibilidade |
+| iPhone 11 | Apple iPhone 11 | iOS 17 | Testes do aplicativo (câmera, TTS, haptics) |
+| iPhone 13 | Apple iPhone 13 | iOS 17 | Testes do aplicativo (câmera, TTS, haptics) |
+| Samsung Galaxy A54 | Samsung Galaxy A54 | Android 13 | Testes de compatibilidade |
 | Notebook | Notebook do Nathan | Ubuntu (Linux) | Servidor do backend (API Go + PostgreSQL via Docker) e painel admin |
 
 ---
@@ -556,9 +556,9 @@ Capturas do aplicativo em execução (pasta [`docs/images/`](docs/images/)). A i
 
 | Dispositivo | Sistema | Versão | Resultado |
 |-------------|---------|--------|-----------|
-| iPhone 11 | iOS | Não registrada | Compatível (Expo Go, SDK 58) |
-| iPhone 13 | iOS | Não registrada | Compatível (Expo Go, SDK 58) |
-| Samsung Galaxy A54 | Android | Não registrada | Compatível (Expo Go, SDK 58) |
+| iPhone 11 | iOS | 17 | Compatível (Expo Go, SDK 58) |
+| iPhone 13 | iOS | 17 | Compatível (Expo Go, SDK 58) |
+| Samsung Galaxy A54 | Android | 13 | Compatível (Expo Go, SDK 58) |
 
 ---
 
