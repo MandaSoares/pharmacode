@@ -289,7 +289,7 @@ pharmacode/
 ├── docs/
 │   ├── diagrams/            # Diagramas de arquitetura
 │   ├── images/              # Screenshots e evidências
-│   └── documents/           # Documentos complementares (relatórios, slides)
+│   └── documents/           # Documentos complementares (artigo científico)
 │
 ├── App.js                   # Ponto de entrada, configuração de navegação
 ├── app.json                 # Configurações do Expo
@@ -648,6 +648,7 @@ docs: adicionar screenshots de alerta e configuracoes
 | Código-fonte do aplicativo | [github.com/MandaSoares/pharmacode](https://github.com/MandaSoares/pharmacode) |
 | Projeto Expo (EAS Update) | [expo.dev/accounts/upxs-team/projects/pharmacode](https://expo.dev/accounts/upxs-team/projects/pharmacode) |
 | Backend (API Go, PostgreSQL e painel admin) | [github.com/Ntanzi07/PharmaCode-UPX2026](https://github.com/Ntanzi07/PharmaCode-UPX2026) |
+| Artigo científico (v2) | [`docs/documents/ArtigoCientifico_PharmaCode_v2.pdf`](docs/documents/ArtigoCientifico_PharmaCode_v2.pdf) |
 
 ---
 
